@@ -1,7 +1,7 @@
 <template>
   <el-config-provider :locale="zhCn">
     <el-container class="AppContainer" :class="{ 'height-unlimited': route?.meta?.heightUnlimited }">
-      <el-header class="App-Header-Main transition-cubic" ref="headerDom">
+      <el-header class="App-Header-Main transition-cubic">
         <HeadBar />
       </el-header>
       <el-main id="AppMainLayer" class="App-Main-Main">
@@ -44,58 +44,7 @@ const locale = ref(zhCn)
 const route = useRoute()
 const store = useStore()
 
-const headerDom = ref()
 const content = ref('')
-
-let lastY = -1
-
-function scrollUp(e) {
-    if( !headerDom.value?.style ) return
-    const y = window.scrollY
-
-    if( y - lastY < 0 ) {
-
-        headerDom.value.style.transform = ``
-
-    } else {
-
-        if( y >= 50 ) {
-
-            headerDom.value.style.transform = `translateY(-100%)`
-
-        } else {
-
-            headerDom.value.style.transform = ``
-
-        }
-
-    }
-
-    lastY = y
-    //
-    // headerDom.value.style.transform = `translateY(-${y}px)`
-}
-
-// function SetSafeA(whiteDomList) {
-//   const aArr = document.getElementsByTagName('a')
-//   Array.from(aArr).forEach(item=>{
-//     item.onclick = () => {
-//       let target = item.getAttribute('href')
-//       if(/^\//.test(target)) {
-//         // 相对本站链接
-//         return true
-//       }
-//       const isSafe = undefined !== whiteDomList.find(item=>{
-//         return target.indexOf(item) !== -1
-//       })
-//       if(!isSafe) {
-//         window.open(`${window.location.host}/direct?target=${target}`, '_blank')
-//         // window.open(`${safeLink}${target}`, '_blank')
-//       }
-//       return false
-//     }
-//   })
-// }
 
 let init = false
 
@@ -108,8 +57,6 @@ function initial() {
 
   const loader = document.getElementById('loader')
   if(loader) loader.style.display = 'none'//loader.parentNode.removeChild(loader) //loader.style.display = 'none'
-
-  document.getElementById('AppMainLayer')?.addEventListener('scroll', scrollUp)
 
   document.body.addEventListener('click', directListener)
 
@@ -129,20 +76,6 @@ function directListener(event) {
 
     event.preventDefault()
 
-    // if(/^\//.test(target)) {
-    //   // 相对本站链接
-    //   return true
-    // }
-
-    // const isSafe = undefined !== whiteDomList.find(item=>{
-    //   return target.indexOf(item) !== -1
-    // })
-
-    // if(!isSafe) {
-    //   window.open(`${window.location.host}/direct?target=${target}`, '_blank')
-    // window.open(`${safeLink}${target}`, '_blank')
-    // }
-
     window.open(`${window.location.origin}/direct?target=${url}`, '_blank')
 
   }
@@ -150,7 +83,6 @@ function directListener(event) {
 
 onBeforeMount(() => {
   document.body.removeEventListener('click', directListener)
-  document.getElementById('AppMainLayer')?.removeEventListener('scroll', scrollUp)
 })
 
 watch(() => store.local.permissions, () => {
@@ -168,7 +100,7 @@ watch(() => store.local.loggedIn, () => {
         store.local.admin = false
         router.push('/index')
     }
-    // console.log("login status changed", store.local.loggedIn)
+    console.log("login status changed", store.local.loggedIn)
     // if( !store.local.loggedIn ) ws.disconnect()
     // else ws.connect()
 })

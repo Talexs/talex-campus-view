@@ -52,7 +52,7 @@ const handleClick = ref((e) => {
   height: 28px;
   //max-height: 28px;
 
-  margin: 16px 1rem auto;
+  // margin: 16px 1rem auto;
 
   font-size: 12px;
   color: #fff;
@@ -106,8 +106,10 @@ const handleClick = ref((e) => {
 
   }
 
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
+  width: 120px;
+  height: 28px;
+  // width: calc(100% - 4px);
+  // height: calc(100% - 4px);
 
   --bg-color: var(--el-color-primary-light-3);
   color: var(--el-color-primary-light-3);

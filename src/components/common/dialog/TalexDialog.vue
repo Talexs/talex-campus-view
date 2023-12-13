@@ -32,7 +32,10 @@ const wrapperRef = ref(null)
 async function _activator(e) {
   const el = wrapperRef.value
 
-  if( e?.path[0] !== el ) return
+  // Optimize higher mode
+  const path = e.composedPath ? e.composedPath() : e.path
+
+  if( path[0] !== el ) return
   if( !props.activator ) {
     return visible.value = false
   }

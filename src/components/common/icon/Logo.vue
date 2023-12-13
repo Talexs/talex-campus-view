@@ -4,9 +4,9 @@
       <div class="logo-first"></div>
       <div class="logo-right"></div>
     </div>
-    <div v-if="!onlyLogo" class="Logo-Text">
-      <span>TalexWiki</span>
-    </div>
+    <!-- <div v-if="!onlyLogo" class="Logo-Text">
+      <span>TaGzxia</span>
+    </div> -->
   </div>
 </template>
 
@@ -28,7 +28,7 @@ const props = defineProps({
 <style lang="scss" scoped>
 .Logo-Container {
   .Logo-Text {
-    width: 70%;
+    width: 100%;
     span {
       position: relative;
 
@@ -45,7 +45,7 @@ const props = defineProps({
     div {
       position: relative;
 
-      left: 50%;
+      left: 100%;
       top: 50%;
 
       width: 15px;
@@ -53,7 +53,7 @@ const props = defineProps({
 
       background: #60d0fe;
       border-radius: 22px / 14px;
-      transform: translate(-50%, -50%) translate(2px, -1px);
+      transform: translate(100%, -50%) translate(2px, -1px);
       opacity: .8;
       filter: contrast(120%) saturate(180%);
     }
@@ -62,7 +62,7 @@ const props = defineProps({
       border-radius: 22px / 19px;
       background: #2d46fe;
       opacity: .68;
-      transform: translate(-50%, -50%) translate(-2px, -13px);
+      transform: translate(100%, -50%) translate(-2px, -13px);
     }
   }
   z-index: 999;

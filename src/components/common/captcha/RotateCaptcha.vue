@@ -16,7 +16,7 @@
 
 <template>
     <div class="RotateCaptcha-Container">
-      <teleport :to="teleport" :disabled="!teleport">
+      <!-- <teleport :to="teleport" :disabled="!teleport"> -->
         <div ref="wrapperDom" class="RotateCaptcha-Wrapper transition-cubic">
           <!--      <div ref="bgDom" class="RotateCaptcha-Background transition-cubic">-->
           <h1>安全验证</h1>
@@ -31,7 +31,7 @@
           </div>
           <!--      </div>-->
         </div>
-      </teleport>
+      <!-- </teleport> -->
 
       <div @click="handleClick" class="RotateCaptcha-Displayer">
         <slot />

@@ -339,20 +339,20 @@ export default {
     position: absolute;
 
     top: 0;
-    left: -3px;
+    left: -7px;
 
     width: 3px;
-    height: 100%;
+    // height: 80%;
 
     opacity: 0;
 
-    //box-shadow: 3px 0 4px var(--el-color-primary);
-    border-radius: 5px;
+    box-shadow: 0 0 1px 1px var(--el-color-primary);
+    border-radius: 8px;
     background-color: var(--el-color-primary);
-    //transform: scale(.8);
+    transform: scale(.8);
     transition: width .35s, left .15s;
 
-    //filter: invert(20%);
+    // filter: invert(20%);
 
     .vertical {
 

@@ -20,7 +20,7 @@ const props = defineProps(['id'])
 const avatar = ref()
 
 onMounted(async () => {
-  avatar.value = `${GlobalConfig.hostName}/user/avatar/${props.id}`
+  avatar.value = `${GlobalConfig.hostName}:${GlobalConfig.endsPort}/user/avatar/${props.id}`
   // console.log(store.local.user)
   if( store.local.loggedIn && props.id === store.local.user.id) {
 

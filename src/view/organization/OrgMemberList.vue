@@ -16,14 +16,18 @@
 
 <template>
   <div>
-    <el-table :data="props.members" stripe row-class-name="OrgMemberList-list">
+    <el-table :data="list" stripe row-class-name="OrgMemberList-list">
       <el-table-column prop="avatar" label="用户">
+        <template #header>
+          <FlatInput v-model="searchState"></FlatInput>
+        </template>
         <template #default="scope">
           <div class="user">
             <img v-if="scope.row?.user?.avatar" :src="scope.row?.user?.avatar" alt="" />
-            <img v-else :src="Avatar" class="corner"  alt=""/>
+            <img v-else :src="Avatar" class="corner" alt="" />
             <p class="username">
               {{ scope.row.user.username }}
+              <span style="opacity: .75">({{ scope.row.user.id }})</span>
             </p>
           </div>
         </template>
@@ -54,9 +58,9 @@
       <el-table-column prop="permission" label="成员权限">
         <template #default="scope">
           <!--            <span v-if="scope.row.permission === 3">超级管理员</span>-->
-          <span v-if="scope.row.permission === 2">成员</span>
-          <span v-if="scope.row.permission === 1">管理员</span>
-          <span v-if="scope.row.permission === 0">超级管理员</span>
+          <span v-if="scope.row.permission === 2">超管成员</span>
+          <span v-else-if="scope.row.permission === 1">管理成员</span>
+          <span v-else>团队成员</span>
           <!--            <span v-if="scope.row.permission < 0">黑名单</span>-->
         </template>
       </el-table-column>
@@ -74,55 +78,127 @@
           <!--            <user-searcher />-->
           <!--            <el-button type="primary">添加成员</el-button>-->
           <!--          </talex-drop-down>-->
-          <el-popover
-                  placement="bottom"
-                  :width="200"
-                  trigger="click"
-          >
-            <template #reference>
-              <el-button :icon="Plus" text plain class="rounder-btn primary stretch-center" size="small" type="primary">
-                添加成员
-              </el-button>
-            </template>
-            <user-searcher @select="handleSearcherSelected"/>
-          </el-popover>
+          <el-button v-if="admin" @click="addMembers = true" :icon="Plus" text plain class="rounder-btn primary stretch-center"
+            size="small" type="primary">
+            添加成员
+          </el-button>
+          <span v-else>操作</span>
         </template>
         <template #default="scope">
-          <!--            <el-button plain size="small" type="primary" @click="handleSetting(scope.row.id)">编辑</el-button>-->
-          <!--            @click="handleDelete(scope.row.id)"-->
-          <!--            v-permission="{ permission: '删除成员', type: 'disabled' }"-->
           <el-button plain size="small" type="primary">编辑</el-button>
-          <el-button plain size="small" type="danger" :disabled="scope.row.permission === 0">删除</el-button>
+          <!-- scope.row.permission === 0 -->
+          <el-button plain size="small" type="danger" :disabled="scope.row.user.id === props.owner_id">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <TalexCoverDialog v-model="addMembers" to="body">
+      <div class="AddMembers">
+        <el-tabs class="flat header-filter">
+          <el-tab-pane label="搜索">
+            <div class="AddMembers-UserSearcher">
+              <user-list-searcher @select="handleSearcherSelected" />
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="批量导入">
+            <OrgBatchImports :org_id="org_id" />
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+    </TalexCoverDialog>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { formatDateDistance } from '~/plugins/addon/utils'
 
 import Avatar from '~/assets/static/avatar.png'
-import UserSearcher from '~/components/common/input/UserSearcher.vue'
+import OrgBatchImports from './OrgBatchImports.vue'
 
-const emits = defineEmits( [ 'select' ] )
-const props = defineProps( {
+const emits = defineEmits(['select'])
+const props = defineProps({
   members: {
     type: Array
+  },
+  org_id: {
+    type: Number
+  },
+  owner_id: {
+    type: Number
+  },
+  admin: {
+    type: Boolean
   }
-} )
+})
 
-const loading = ref( false )
+const list = ref([])
+const addMembers = ref(false)
+const searchState = ref('')
 
-function handleSearcherSelected( item ) {
-  emits( 'select', item )
+watch(() => searchState.value, value => {
+  if (!value || !value.trim()) return
+
+  handleSearched()
+})
+
+watchEffect(() => {
+  if (!props.members) return
+
+  handleSearched()
+})
+
+function handleSearched() {
+  const value = searchState.value.trim()
+
+  list.value = props.members.filter(item => {
+    return item.user.username.includes(value) || (JSON.stringify(item.user).includes(value) && value.length > 1)
+  })
+}
+
+function handleSearcherSelected(item) {
+  emits('select', item)
 }
 
 </script>
 
 <style lang="scss" scoped>
+.AddMembers {
+
+  .el-tabs,
+  :deep(.el-tabs__content),
+  :deep(.el-tab-pane) {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    // overflow: hidden;
+  }
+
+
+  :deep(.AddMembers-UserSearcher) {
+    position: relative;
+    padding: 1rem;
+
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+  }
+
+  position: relative;
+  display: flex;
+  padding: 2rem;
+
+  width: 1200px;
+  height: 100%;
+
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 .OrgMemberList-list {
   .user {
     position: relative;
@@ -130,11 +206,13 @@ function handleSearcherSelected( item ) {
 
     top: 10px;
   }
+
   img {
     margin-bottom: 5px;
     width: 48px;
     height: 48px;
   }
+
   .username {
     position: relative;
     padding: 2px 8px;

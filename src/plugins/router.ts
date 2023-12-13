@@ -22,15 +22,22 @@ import { TipType } from '~/plugins/addon/Tipper'
 const routes: any = [
     {
         path: "/",
-        redirect: "/index"
+        redirect: "/org"
     },
     {
         path: "/index",
         name: "首页",
         component: () => import('./../view/base/Index.vue'),
         meta: {
-            showFooter: true
+            showFooter: true,
+            loginRequired: true,
+            adminRequired: true
         }
+    },
+    {
+        path: "/user/login",
+        name: "登录",
+        component: () => import('../view/base/Login.vue')
     },
     {
         path: "/user/personal",
@@ -42,8 +49,8 @@ const routes: any = [
         component: () => import('../view/center/PersonalInfo.vue')
     },
     {
-      path: "/about",
-      redirect: "/about/protocol"
+        path: "/about",
+        redirect: "/about/protocol"
     },
     {
         path: "/about",
@@ -127,7 +134,7 @@ const routes: any = [
                     },
                     {
                         path: "/org/list",
-                        name: "创建组织",
+                        name: "组织列表",
                         meta: {
                             heightUnlimited: true,
                             loginRequired: true,
@@ -243,6 +250,11 @@ const routes: any = [
         name: "组织详情",
         component: () => import('../view/organization/OrgView.vue')
     },
+    {
+        path: "/org/view/:id/assignments/:assignment",
+        name: "组织作业",
+        component: () => import('../view/organization/view/AssignmentDetail.vue')
+    },
     // {
     //     path: "/user/notifications",
     //     name: "消息通知",
@@ -299,30 +311,30 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
 
-    if( to.name )
+    if (to.name)
         document.title = `${GlobalConfig.name} | ${String(to.name)}`
 
-    if( !to?.meta?.loginRequired ) return next()
+    if (!to?.meta?.loginRequired) return next()
 
     const store = useStore()
 
-    if( !store.local.loggedIn ) {
+    if (!store.local.loggedIn) {
 
         window.$tipper.tip('请先登录!', {
             stay: 4200,
             type: TipType.WARNING
         })
 
-        return router.back()
+        return router.push('/user/login')
 
     }
 
-    if( to.meta?.adminRequired ) {
+    if (to.meta?.adminRequired) {
 
         // @ts-ignore
-        if( !store.local.admin  ) {
+        if (!store.local.admin) {
 
-            window.$tipper.tip('您没有全新!', {
+            window.$tipper.tip('您没有权限!', {
                 stay: 4200,
                 type: TipType.WARNING
             })

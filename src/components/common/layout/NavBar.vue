@@ -7,8 +7,8 @@
   <div class="NavBar-Wrapper LayoutCenter-Frame" :class="{ 'height-fixed': !$route.meta?.heightUnlimited, 'width-larger': $route.meta?.largerWidth }">
     <div class="NavBar-Container">
       <TFSelector router-mode vertical>
-        <TFSelectorItem to="/user/dashboard" vertical title="数据看板"></TFSelectorItem>
-        <TFSelectorItem to="/user/wikis" vertical title="维基"></TFSelectorItem>
+        <TFSelectorItem v-if="store.local.admin" to="/user/dashboard" vertical title="数据看板"></TFSelectorItem>
+        <TFSelectorItem v-if="store.local.admin" to="/user/wikis" vertical title="维基"></TFSelectorItem>
         <TFSelectorItem to="/org" vertical title="组织"></TFSelectorItem>
         <TFSelectorItem v-if="store.local.admin" to="/cms/users" vertical title="用户管理"></TFSelectorItem>
         <TFSelectorItem v-if="store.local.admin" to="/cms/eller" vertical title="权限管理"></TFSelectorItem>

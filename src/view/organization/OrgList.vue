@@ -20,7 +20,7 @@
       <div style="align-items: baseline" class="LayoutSub-Header">
         <p class="title force">组织列表</p>
 
-        <div class="aggregation">
+        <div class="aggregation" v-if="store.local.admin">
           <TalexDropdown >
             <template #display>
               <el-button class="rounder-btn primary" text :icon="Plus">
@@ -42,7 +42,7 @@
 <!--    </transition>-->
 <!--    <transition name="el-fade-in">-->
       <!-- 列表页面 -->
-      <el-table v-if="listLayout === 0" :data="wikiList" v-loading="loading">
+      <el-table v-if="listLayout === 0 && store.local.admin" :data="wikiList" v-loading="loading">
         <el-table-column type="index" :index="indexMethod" label="序号" width="100"></el-table-column>
         <el-table-column prop="title" label="书名"></el-table-column>
         <el-table-column prop="author" label="权限">
@@ -70,7 +70,7 @@
 <!--    </transition>-->
 
 <!--    <transition name="el-fade-in">-->
-      <div v-if="listLayout === 1" class="WikiList-BlockLayout">
+      <div v-else class="WikiList-BlockLayout">
         <!-- 块状视图 列表页面 -->
         <OrgBlockList @delete="handleDelete" @setting="handleSetting" @edit="handleEdit" :org="org" v-for="org in wikiList" :key="org.id" />
       </div>

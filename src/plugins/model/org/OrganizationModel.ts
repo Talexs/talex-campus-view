@@ -15,6 +15,7 @@
  */
 
 import { BaseModel } from '~/plugins/model/BaseModel'
+import md5 from 'md5'
 
 class OrganizationModel extends BaseModel {
 
@@ -43,6 +44,28 @@ class OrganizationModel extends BaseModel {
     invite(org_id: number, user_id: number) {
         return this._post('invite/' + org_id, {
             user_id
+        })
+    }
+
+    batchImports(org_id: number, arr: Array<{ user_id: number, username: string, userpass: string }>) {
+
+        // encrypt each arr userpass
+        arr.forEach(item => {
+            console.log(item.userpass, md5(item.userpass))
+            item.userpass = md5(item.userpass)
+        })
+
+        return this._post('batch/', {
+            members: arr, id: org_id
+        })
+    }
+
+    logs(org_id: number, obj = {
+        before: new Date().getTime(),
+        limit: 10
+    }) {
+        return this._post('logs/', {
+            id: org_id, ...obj
         })
     }
 

@@ -3,6 +3,44 @@ import { createApp, customRef, reactive, ref, watch, h, render } from 'vue'
 import gsap from 'gsap'
 import { Md5 } from 'ts-md5'
 
+// generate a function that return a ref value that will automatically increase except manually call fun
+export function genAutoIncreaseRef(initValue = 0) {
+    const refValue = ref(initValue)
+
+    // the value will be increased every 10 milliseconds but will not be 1 (always 0 - 1)
+    // For example: first time: 0.1 then: 0.15 then 0.195 then 0.2345 then 0.2789 then 0.3210 then 0.3678 then 0.4123 then 0.4567 then 0.5012 then 0.5456 then 0.5890 then 0.6324 then 0.6789 then 0.7234 then 0.7678 then 0.8123 then 0.8567 then 0.9012 then 0.9456 then 0.9890 then 1
+    const fun = () => {
+        gsap.to(refValue, {
+            duration: 0.01,
+            value: refValue.value + (1 - refValue.value) / 100
+        })
+
+        // console.log(refValue.value)
+    }
+
+    // automatically call
+    let timer;
+
+    const start = () => {
+        timer = setInterval(fun, 100)
+        return cancel
+    }
+
+    const cancel = () => {
+        clearInterval(timer!)
+
+        // set value to 1
+        gsap.to(refValue, {
+            duration: 0.01,
+            value: 1
+        })
+
+        return () => refValue.value = 0
+    }
+
+    return [refValue, start ]
+}
+
 export function genGsapNumber(number = 0, duration = .5) {
     const obj = reactive({
         number,

@@ -18,33 +18,13 @@
   <div class="HeadBar-Container">
     <el-row :gutter="20">
       <el-col :span="2">
-        <Logo/>
+        <Logo />
       </el-col>
       <el-col :span="20">
-        <MenuIcon class="only-pe-display">
-          <div class="HeadBar-Main">
-            <TFSelector router-mode>
-              <TFSelectorItem plain to="/index" title="主页"></TFSelectorItem>
-<!--              <TFSelectorItem plain disabled to='/team' title="团队"></TFSelectorItem>-->
-              <TFSelectorItem plain disabled to='/template' title="模板"></TFSelectorItem>
-<!--              <TFSelectorItem plain :disabled="!store.local.loggedIn" to='/user/security' title="安全" />-->
-              <TFSelectorItem plain to='/about' title="关于" />
-            </TFSelector>
-          </div>
-        </MenuIcon>
-        <div class="HeadBar-Main only-pc-display">
-          <TFSelector router-mode>
-            <TFSelectorItem plain to="/index" title="主页"></TFSelectorItem>
-            <TFSelectorItem plain to='/org/list' title="组织"></TFSelectorItem>
-            <TFSelectorItem plain disabled to='/template' title="模板"></TFSelectorItem>
-            <TFSelectorItem plain :disabled="!store.local.loggedIn" to='/user/security' title="安全" />
-            <TFSelectorItem plain to='/about' title="关于" />
-          </TFSelector>
-        </div>
       </el-col>
       <el-col :span="2">
-        <div class="HeadBar-Personal">
-          <div class="UserPersonal" v-if="store.local.loggedIn">
+        <div class="HeadBar-Personal" v-if="store.local.loggedIn">
+          <div class="UserPersonal">
             <!--            <TalexDropdown :icon="Bell" hover-trigger style="margin-right: 10px">-->
             <!--              <TalexDropItem>-->
             <!--                <template #icon>-->
@@ -106,8 +86,8 @@
             <TalexDropdown hover-trigger>
               <template #display>
                 <el-badge :hidden="!notification?.count" is-dot class="headbar-dot">
-                  <UserAvatar @click="$router.push('/user/dashboard')" :id="store.local.user.id"
-                              style="cursor: pointer"/>
+                  <UserAvatar @click="$router.push('/org')" :id="store.local.user.id"
+                    style="cursor: pointer" />
                 </el-badge>
               </template>
               <div class="HeadBar-UserPopper">
@@ -121,7 +101,7 @@
                 </template>
                 <template #label>外观</template>
                 <template #multiple>
-                  <TalexDropItem @click="theme.name = 'light';theme.adapt = ThemeAdapt.NONE">
+                  <TalexDropItem @click="theme.name = 'light'; theme.adapt = ThemeAdapt.NONE">
                     <template #icon>
                       <el-icon>
                         <Sunny />
@@ -129,7 +109,7 @@
                     </template>
                     <template #label>明净光亮</template>
                   </TalexDropItem>
-                  <TalexDropItem @click="theme.name = 'dark';theme.adapt = ThemeAdapt.NONE">
+                  <TalexDropItem @click="theme.name = 'dark'; theme.adapt = ThemeAdapt.NONE">
                     <template #icon>
                       <el-icon>
                         <Moon />
@@ -190,19 +170,19 @@
                   <TalexDropItem disabled>
                     <template #icon>
                       <el-icon>
-                        <MostlyCloudy/>
+                        <MostlyCloudy />
                       </el-icon>
                     </template>
                     <template #label>云镜雾色</template>
                   </TalexDropItem>
                 </template>
               </TalexDropItem>
-              <TalexDropItem divider/>
+              <TalexDropItem divider />
               <TalexDropItem :badge="notification?.count ? `+${notification?.count}` : null"
-                             @click="globalDialogs.notification.value = true/*$router.push('/user/notifications')*/">
+                @click="globalDialogs.notification.value = true/*$router.push('/user/notifications')*/">
                 <template #icon>
                   <el-icon>
-                    <Bell/>
+                    <Bell />
                   </el-icon>
                 </template>
                 <template #label>
@@ -212,7 +192,7 @@
               <TalexDropItem @click="$router.push('/user/personal')">
                 <template #icon>
                   <el-icon>
-                    <Setting/>
+                    <Setting />
                   </el-icon>
                 </template>
                 <template #label>
@@ -221,7 +201,9 @@
               </TalexDropItem>
               <TalexDropItem @click="$router.push('/about')">
                 <template #icon>
-                  <el-icon><Help /></el-icon>
+                  <el-icon>
+                    <Help />
+                  </el-icon>
                 </template>
                 <template #label>
                   帮助
@@ -230,7 +212,9 @@
               <TalexDropItem divider />
               <TalexDropItem @click="store.local.loggedIn = false" danger>
                 <template #icon>
-                  <el-icon><SwitchButton /></el-icon>
+                  <el-icon>
+                    <SwitchButton />
+                  </el-icon>
                 </template>
                 <template #label>
                   退出登录
@@ -238,22 +222,13 @@
               </TalexDropItem>
             </TalexDropdown>
           </div>
-          <TalexDialog v-else v-model="globalDialogs.login.value" has-display>
-            <template #display>
-              <el-button type="primary">登录 / 注册</el-button>
-            </template>
-            <Login @close="globalDialogs.login.value = false" @success="globalDialogs.login.value = false"/>
-          </TalexDialog>
         </div>
       </el-col>
     </el-row>
 
     <Teleport to="body">
-      <el-drawer
-              v-model="globalDialogs.notification.value"
-              title="消息通知"
-      >
-        <Notification :notification="notification"/>
+      <el-drawer v-model="globalDialogs.notification.value" title="消息通知">
+        <Notification :notification="notification" />
       </el-drawer>
     </Teleport>
   </div>
@@ -298,16 +273,16 @@ import Notification from '~/view/center/Notification.vue'
 
 const store = useStore()
 
-const globalDialogs = toRefs( store.system.global.dialog )
+const globalDialogs = toRefs(store.system.global.dialog)
 const theme = store.local.theme
 
-// async function changeTheme(themeStr) {
-//   store.local.theme = theme.value = themeStr
-//   await window.$tipper.mention( new MentionTip( "切换成功!", 1400, TipType.SUCCESS ) )
-// }
+async function changeTheme(themeStr) {
+  store.local.theme = theme.value = themeStr
+  await window.$tipper.mention(new MentionTip("切换成功!", 1400, TipType.SUCCESS))
+}
 
 // const notification = store.system.user.notifications
-const notification = computed( () => store.system.user.notifications )
+const notification = computed(() => store.system.user.notifications)
 
 </script>
 

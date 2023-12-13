@@ -1,11 +1,11 @@
 <template>
-<!--  <div class="Login-Wrapper">-->
+  <div class="Login-Wrapper">
     <div class="Login-Container">
 
       <div class="Login-Container-Header">
 
-        <h1 style="animation: loadIn .15s .1s backwards">TalexWiki</h1>
-        <p style="animation: loadIn .15s .2s backwards">写你所想，享你所写</p>
+        <h1 style="animation: loadIn .15s .1s backwards">TaGzxia</h1>
+        <p style="animation: loadIn .15s .2s backwards">快捷教学管理系统</p>
 
       </div>
 
@@ -13,19 +13,22 @@
 
         <el-form>
           <el-form-item>
-            <FlatInput ref="inputAccountDom" style="animation: loadIn .15s .3s backwards" placeholder="账号" v-model="formModel.username">
+            <FlatInput ref="inputAccountDom" style="animation: loadIn .15s .3s backwards" placeholder="账号"
+              v-model="formModel.username">
               <template #suffix>
                 <UserAnimate :parent-amo="3" />
               </template>
             </FlatInput>
           </el-form-item>
           <el-form-item>
-            <FlatInput style="animation: loadIn .15s .4s backwards" placeholder="密码" v-model="formModel.password" pass :max-pass-dot-num="29"></FlatInput>
+            <FlatInput style="animation: loadIn .15s .4s backwards" placeholder="密码" v-model="formModel.password" pass
+              :max-pass-dot-num="29"></FlatInput>
           </el-form-item>
 
           <el-form-item>
             <RotateCaptcha :before-validation="tryLogin" @success="_login">
-              <FlatButton :loading-flag="loadings.btn" plain style="border-radius: 8px;margin: 0 0 auto;animation: loadIn .15s .5s backwards">登 录</FlatButton>
+              <FlatButton :loading-flag="loadings.btn" plain
+                style="border-radius: 8px;margin: 0 0 auto;animation: loadIn .15s .5s backwards">登 录</FlatButton>
             </RotateCaptcha>
           </el-form-item>
 
@@ -45,7 +48,7 @@
 
     </div>
 
-<!--  </div>-->
+  </div>
 </template>
 
 <script setup>
@@ -75,42 +78,6 @@ const loadings = reactive({
   btn: false
 })
 
-async function goRegister() {
-
-  // await forWikiDialogTip("注册暂未开放", "抱歉，由于维基系统正处于内测状态，暂不开放注册权限。", [
-  //   {
-  //     content: "申请",
-  //     type: TipType.WARNING,
-  //     async onClick() {
-  //
-  //       await sleep(5000)
-  //
-  //       await window.$tipper.mention(new MentionTip("抱歉，现在无法申请!", 3200, TipType.ERROR, true))
-  //
-  //       return false
-  //
-  //     },
-  //     loading(stop) {
-  //
-  //       setTimeout(() => {
-  //
-  //         stop()
-  //
-  //       }, 4000)
-  //
-  //     }
-  //   },
-  //   {
-  //     content: "了解",
-  //     type: TipType.INFO,
-  //     async onClick() { return true }
-  //   }
-  // ])
-
-  await router.push( '/register' )
-
-}
-
 async function _login(token) {
 
   try {
@@ -121,6 +88,10 @@ async function _login(token) {
     store.local.permissions = res.eller.permissions
     store.local.loggedIn = true
 
+    store.local.setLoggedIn(true)
+
+    console.log(store.local)
+
     loadings.btn = false
 
     await window.$tipper.mention(new MentionTip("登录成功!", {
@@ -128,6 +99,8 @@ async function _login(token) {
     }))
 
     await sleep(1300)
+
+    router.push('/user/personal')
 
     emits('success')
 
@@ -145,7 +118,7 @@ async function tryLogin(func) {
 
   await sleep(1200)
 
-  if( !formModel.username || formModel.username.length < 3 || formModel.username.length > 32 ) {
+  if (!formModel.username || formModel.username.length < 3 || formModel.username.length > 32) {
 
     loadings.btn = false
 
@@ -153,7 +126,7 @@ async function tryLogin(func) {
 
   }
 
-  if( !formModel.password || formModel.password.length < 3 || formModel.password.length > 32 ) {
+  if (!formModel.password || formModel.password.length < 3 || formModel.password.length > 32) {
 
     loadings.btn = false
 
@@ -183,6 +156,7 @@ export default {
   h1 {
     margin-top: 10px;
   }
+
   h1:after {
     z-index: -1;
     content: '';
@@ -201,11 +175,13 @@ export default {
     background: var(--el-color-primary-light-5);
     //opacity: .65;
   }
+
   p {
 
     opacity: .65;
 
   }
+
   position: relative;
   text-align: center;
 }
@@ -230,14 +206,16 @@ export default {
         background-color: var(--el-text-color-regular);
         transform: translateX(-30px) scaleX(0);
         opacity: 0;
-        transition: .3s cubic-bezier(.25,.8,.25,1);
+        transition: .3s cubic-bezier(.25, .8, .25, 1);
       }
+
       &:hover:before {
 
         transform: translateX(0);
         opacity: 1;
 
       }
+
       position: relative;
 
       width: 100%;
@@ -249,12 +227,14 @@ export default {
       text-align: right;
       cursor: pointer;
     }
+
     display: flex;
     padding-right: 2px;
 
     font-size: 12px;
 
   }
+
   position: relative;
 
   bottom: 5%;
@@ -264,21 +244,23 @@ export default {
 
 .Login-Container {
   z-index: 10;
-  //&:before {
-  //  content: '';
-  //  position: absolute;
-  //
-  //  left: 0;
-  //  top: 0;
-  //
-  //  width: 100%;
-  //  height: 100%;
-  //
-  //  opacity: .75;
-  //  //backdrop-filter: saturate(180%) blur(10px);
-  //  border-radius: 8px;
-  //  background-color: var(--el-bg-color-page);
-  //}
+
+  &:before {
+    content: '';
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: .75;
+    // backdrop-filter: saturate(180%) blur(10px);
+    border-radius: 8px;
+    background-color: var(--el-bg-color-page);
+  }
+
   position: relative;
   display: flex;
   padding: 30px 20px;
@@ -286,56 +268,58 @@ export default {
   flex-direction: column;
   align-items: center;
 
-  //top: 50%;
-  //left: 50%;
+  top: 50%;
+  left: 50%;
 
   width: 380px;
   height: 350px;
 
   border-radius: 8px;
-  //backdrop-filter: saturate(180%) blur(50px);
-  //transform: translate(-50%, -50%);
+  backdrop-filter: saturate(180%) blur(50px);
+  transform: translate(-50%, -50%);
   animation: loadIn .25s;
 }
 
-//.Login-Wrapper {
-//  &:before {
-//    content: "";
-//    position: absolute;
-//
-//    top: 0;
-//    left: 50%;
-//
-//    width: 120px;
-//    height: 100%;
-//
-//    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-//    transform: scale(2) skewX(20deg);
-//  }
-//  &:after {
-//    z-index: 0;
-//    content: "";
-//    position: absolute;
-//
-//    top: -10%;
-//    left: 50%;
-//
-//    width: 400px;
-//    height: 100%;
-//
-//    background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-//    transform: scale(2) skewX(-70deg);
-//  }
-//  position: absolute;
-//  //padding: 5%;
-//
-//  left: 0;
-//  top: 0;
-//
-//  width: 100%;
-//  height: 100%;
-//
-//  background-color: var(--el-bg-color);
-//  overflow: hidden;
-//}
+.Login-Wrapper {
+  &:before {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+
+    width: 120px;
+    height: 100%;
+
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    transform: scale(2) skewX(20deg);
+  }
+
+  &:after {
+    z-index: 0;
+    content: "";
+    position: absolute;
+
+    top: -10%;
+    left: 50%;
+
+    width: 400px;
+    height: 100%;
+
+    background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+    transform: scale(2) skewX(-70deg);
+  }
+
+  position: absolute;
+  //padding: 5%;
+
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--el-bg-color);
+  overflow: hidden;
+}
 </style>

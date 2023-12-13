@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-@font-face {
-  font-family: "HarmonyOS Sans";
-  src: url("assets/fonts/harmony/HarmonyOS_Sans_Regular.ttf");
-}
+// @font-face {
+//   font-family: "HarmonyOS Sans";
+//   src: url("assets/fonts/harmony/HarmonyOS_Sans_Regular.ttf");
+// }
 
 @font-face {
   font-family: "ResourceHanRoundedCN";
-  src: url("assets/fonts/rounded/ResourceHanRoundedCN-Regular.ttf")
+  src: url("assets/fonts/rounded/ResourceHanRoundedCN-Regular.ttf");
 }
 
 .font-rounded {
-  font-family: "ResourceHanRoundedCN", "HarmonyOS Sans", Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "ResourceHanRoundedCN", Inter, Avenir, Helvetica, Arial,
+    sans-serif;
 }
 
 :root {
@@ -93,13 +94,13 @@ body {
       background-color: #fff;
       border-radius: 3px 0 0 3px;
       transform: scaleY(0);
-      transition: all .25s
+      transition: all 0.25s;
     }
     i::before {
       position: relative;
       top: -3px;
     }
-    transition: .3s cubic-bezier(.25,.8,.25,1);
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
   .el-menu-item.is-active {
     span {
@@ -112,25 +113,20 @@ body {
     }
     background-color: #ffffff;
     border-radius: 8px !important;
-
   }
 }
 
 .el-sub-menu {
-
   --el-menu-active-color: #fff !important;
 
   .el-sub-menu__title {
-
     i::before {
       position: relative;
       top: -3px !important;
     }
-
   }
 
   li {
-
     margin: 4px 0;
     height: 40px;
     i::before {
@@ -142,59 +138,48 @@ body {
     }
   }
   li.is-active {
-
     &:after {
       right: -26% !important;
       width: 8% !important;
     }
-
   }
 }
 
 .upload-item {
-
   border-radius: 8px !important;
   background-color: var(--el-border-color-light) !important;
-
 }
 
 .el-input {
   .el-input__count-inner {
     background-color: transparent !important;
   }
+  --el-input-bg-color: var(--input-bg, var(--el-fill-color-light)) !important;
 }
 
-.el-input, .el-textarea {
-
+.el-input,
+.el-textarea {
   --el-input-border-radius: 8px !important;
   --el-input-bg-color: var(--el-border-color-lighter) !important;
-
 }
 
 .el-cascader {
-
   width: 100%;
-
 }
 
 .el-cascader-panel {
   .el-cascader-menu {
-
     min-width: 270px;
-
   }
 
   border-radius: 8px !important;
   background-color: var(--el-border-color-light) !important;
 
   & + .el-popper__arrow {
-
     &:before {
       background-color: var(--el-border-color-light) !important;
     }
-
   }
-
 }
 
 .el-button.stretch-center {
@@ -216,7 +201,7 @@ body {
   height: 28px;
 
   border-radius: 4px;
-  transition: .3s cubic-bezier(.25,.8,.25,1);
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   &:hover {
     border: none !important;
   }
@@ -265,9 +250,7 @@ span.air-dot {
   }
   &.air-dot-right {
     &:before {
-
       left: calc(100% + 6px);
-
     }
     left: 16px !important;
     //left: 0;
@@ -294,12 +277,11 @@ span.air-dot {
 
       background-color: var(--el-color-primary);
       transform: translateY(-5px) scale(0);
-      transition: .25s;
+      transition: 0.25s;
     }
     &:hover {
       &:after {
-
-        opacity: .5;
+        opacity: 0.5;
 
         transform: translateY(0) scale(1);
       }
@@ -323,6 +305,8 @@ span.air-dot {
     line-height: var(--el-tabs-header-height);
     width: max-content;
     //width: 100%;
+
+    top: 5px;
 
     text-align: center;
   }
@@ -350,14 +334,11 @@ span.air-dot {
 
       background: none;
     }
-
   }
   .el-tabs__nav-wrap {
-
     &:after {
       display: none;
     }
-
   }
 }
 
@@ -365,7 +346,7 @@ span.tip {
   position: relative;
 
   font-size: 14px;
-  opacity: .75;
+  opacity: 0.75;
 }
 
 //.vditor-reset {
@@ -434,7 +415,7 @@ span.tip {
 }
 
 .transition-cubic {
-  transition: .3s cubic-bezier(.25,.8,.25,1);
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 @keyframes CenterFrameLoad {
@@ -504,7 +485,6 @@ span.premium-end {
     background: var(--el-color-warning);
     border-radius: 8px;
   }
-
 }
 
 .LayoutSub-Frame {
@@ -555,15 +535,17 @@ span.badge {
 }
 
 .LayoutCenter-Frame {
-  & > span.title-info, span.title-info.force {
+  & > span.title-info,
+  span.title-info.force {
     position: relative;
     padding-left: 5px;
 
     font-size: 15px;
-    opacity: .85;
+    opacity: 0.85;
   }
 
-  & > p.title, p.title.force {
+  & > p.title,
+  p.title.force {
     position: relative;
     margin-bottom: 20px;
 
@@ -573,7 +555,7 @@ span.badge {
     font-weight: 600;
     font-size: 20px;
     line-height: 30px;
-    border-left: 3px solid var(--el-color-primary)
+    border-left: 3px solid var(--el-color-primary);
   }
   position: relative;
   padding: 10px 25px;
@@ -586,8 +568,8 @@ span.badge {
   background: var(--el-bg-color);
   border-radius: 8px;
   opacity: 0;
-  transition: .3s cubic-bezier(.25,.8,.25,1);
-  animation: CenterFrameLoad .3s cubic-bezier(.25,.8,.25,1) forwards;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: CenterFrameLoad 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
 .LoadingWrapper {
@@ -598,10 +580,14 @@ span.badge {
   justify-content: center;
   align-items: center;
 
+  top: 0;
+  left: 0;
+
   width: 100%;
   height: 100%;
 
-  //opacity: .25;
+  // opacity: .25;
+  // pointer-events: none;
   filter: inset(5%);
   background-color: var(--el-fill-color);
 }

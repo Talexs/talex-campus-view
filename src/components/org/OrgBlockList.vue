@@ -28,9 +28,9 @@
     <div class="OrgBookList-Overlay transition-cubic">
       <div class="action-overlay transition-cubic" />
       <div class="action-bar">
-        <el-button @click="emits('edit', org.id)" size="large" :icon="Edit" circle />
+        <el-button v-if="store.local.admin" @click="emits('edit', org.id)" size="large" :icon="Edit" circle />
         <el-button @click="emits('setting', org.id)" size="large" :icon="Setting" circle />
-        <el-button @click="emits('delete', org.id)" type="danger" size="large" :icon="Delete" circle />
+        <el-button v-if="store.local.admin" @click="emits('delete', org.id)" type="danger" size="large" :icon="Delete" circle />
       </div>
     </div>
 <!--    {{ org }}-->
@@ -45,6 +45,9 @@ export default {
 
 <script setup>
 import { Edit, Setting, Delete, Share } from '@element-plus/icons-vue'
+import { useStore } from '~/plugins/store/index.ts'
+
+const store = useStore()
 
 const props = defineProps(['org'])
 const emits = defineEmits(['edit', 'setting', 'delete', 'share'])

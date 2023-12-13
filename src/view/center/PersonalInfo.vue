@@ -148,6 +148,11 @@ function submitForm() {
         store.local.user = null
         store.local.permissions = []
 
+        await window.$tipper.mention(new MentionTip('数据核对失败!', {
+          type: TipType.ERROR,
+          emphasis: true
+        }))
+
         await useRouter().push( '/' )
 
       }
@@ -166,7 +171,7 @@ async function uploadCover(res) {
   const url = res[0]
   const uuid = url.split("/").at(-1)
 
-  store.local.user.avatar = user.value.avatar = avatarUrl.value = GlobalConfig.hostName + url.replace(uuid, "") + encodeURIComponent(uuid)
+  store.local.user.avatar = user.value.avatar = avatarUrl.value = `${GlobalConfig.hostName}:${GlobalConfig.endsPort}` + url.replace(uuid, "") + encodeURIComponent(uuid)
 
   const back = await userModel.updateUserInfo( avatarUrl.value )
 

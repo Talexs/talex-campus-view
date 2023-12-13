@@ -26,7 +26,7 @@ export async function forWikiTip(message: String, stay: Number = 2200, type: Tip
 
     let index: number = 0;
 
-    while( document.getElementById('wiki-tip-' + index) ) {
+    while (document.getElementById('wiki-tip-' + index)) {
 
         index++;
 
@@ -34,6 +34,7 @@ export async function forWikiTip(message: String, stay: Number = 2200, type: Tip
 
     root.id = 'wiki-tip-' + index;
 
+    root.style.zIndex = `${10000 + index}`
     root.style.position = 'absolute'
     root.style[left ? 'left' : 'right'] = '-100%'
     root.style.bottom = `calc(5% + ${index * 45}px)`;
@@ -69,8 +70,8 @@ export function sendTip(message: String, options = {
     loading: null,
     left: false
 } as {
-    stay: Number,
-    type: TipType | 'loading' | null | Object,
+    stay?: Number,
+    type?: TipType | 'loading' | null | Object,
     loading?: Function | null,
     left?: boolean
 }) {
@@ -82,12 +83,13 @@ export function sendTip(message: String, options = {
 
     let index: number = 0;
 
-    while( document.getElementById('talex-tip-' + index) ) {
+    while (document.getElementById('talex-tip-' + index)) {
 
         index++;
 
     }
 
+    root.style.zIndex = `${10000 + index}`
     root.id = 'talex-tip-' + index;
 
     root.style.position = 'absolute'
@@ -99,7 +101,7 @@ export function sendTip(message: String, options = {
     const _type = ref('loading' as any)
     const _content = ref(message)
 
-    if( options.loading ) {
+    if (options.loading) {
 
         options.stay = -1
         options.type = _type
@@ -134,7 +136,7 @@ export function sendTip(message: String, options = {
 
             _type.value = tType || oType
 
-            if( message ) _content.value = message
+            if (message) _content.value = message
 
         })
 
@@ -169,13 +171,13 @@ export async function sendMentionTip(tip: MentionTip) {
 
 }
 
-export async function forWikiDialogTip(title: String, message: String, btns: DialogBtn[] = [ { content: "确定", type: TipType.INFO, onClick: async () => true } ]) {
+export async function forWikiDialogTip(title: String, message: String, btns: DialogBtn[] = [{ content: "确定", type: TipType.INFO, onClick: async () => true }]) {
 
     const root: HTMLDivElement = document.createElement('div');
 
     let index: number = 0;
 
-    while( document.getElementById('wiki-dialog-tip-' + index) ) {
+    while (document.getElementById('wiki-dialog-tip-' + index)) {
 
         index++;
 

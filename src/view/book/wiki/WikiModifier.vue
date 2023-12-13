@@ -168,7 +168,7 @@ const uploadCover = ref(res => {
   const url = res[0]
   const uuid = url.split("/").at(-1)
 
-  wiki.cover = GlobalConfig.hostName + url.replace(uuid, "") + encodeURIComponent(uuid)
+  wiki.cover = `${GlobalConfig.hostName}:${GlobalConfig.endsPort}` + url.replace(uuid, "") + encodeURIComponent(uuid)
 })
 </script>
 

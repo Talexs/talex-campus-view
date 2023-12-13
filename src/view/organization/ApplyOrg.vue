@@ -27,25 +27,22 @@
                 <el-form-item label="名称" prop="title">
                   <el-input v-model="org.name" placeholder="请填写组织名称."></el-input>
                 </el-form-item>
-<!--                <el-form-item label="权限" prop="author">-->
-<!--                  <el-radio-group v-model="wiki.permission" class="ml-4">-->
-<!--                    <el-radio :label="1">私有</el-radio>-->
-<!--                    <el-radio :label="0">公开</el-radio>-->
-<!--                  </el-radio-group>-->
-<!--                </el-form-item>-->
+                <!--                <el-form-item label="权限" prop="author">-->
+                <!--                  <el-radio-group v-model="wiki.permission" class="ml-4">-->
+                <!--                    <el-radio :label="1">私有</el-radio>-->
+                <!--                    <el-radio :label="0">公开</el-radio>-->
+                <!--                  </el-radio-group>-->
+                <!--                </el-form-item>-->
                 <el-form-item label="封面" prop="image">
                   <!--              <el-input v-model="book.image" placeholder="请填写封面地址"></el-input>-->
                   <!--              {{ // [ book.image ] }}-->
-                  <upload-imgs :value="[ { src: org?.cover, display: org?.cover } ]" @upload="uploadCover" :maxNum="1" :rules="{ maxSize: 30, minWidth: 32, minHeight: 32 }" :multiple="false" />
+                  <upload-imgs :value="[{ src: org?.cover, display: org?.cover }]" @upload="uploadCover" :maxNum="1"
+                    :rules="{ maxSize: 30, minWidth: 32, minHeight: 32 }" :multiple="false" />
                   <!--              <TUploader v-model="wiki.image" :rules="{ maxSize: 64, minWidth: 32, minHeight: 32 }" />-->
                 </el-form-item>
                 <el-form-item label="简介" prop="summary">
-                  <el-input
-                          type="textarea"
-                          :autosize="{ minRows: 4, maxRows: 8 }"
-                          placeholder="请输入简介"
-                          v-model="org.summary"
-                  >
+                  <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" placeholder="请输入简介"
+                    v-model="org.summary">
                   </el-input>
                 </el-form-item>
                 <el-form-item class="submit">
@@ -57,7 +54,8 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane :disabled="!editId" label="成员">
-          <member-list @select="handleAddMember" :members="org._members"/>
+          <member-list :admin="admin" :owner_id="org.owner_id" :org_id="org.id" @select="handleAddMember"
+            :members="org._members" />
         </el-tab-pane>
         <el-tab-pane label="权限" disabled>
 
@@ -87,30 +85,32 @@ import GlobalConfig from '~/config/GlobalConfig.js'
 import { useRoute, useRouter } from 'vue-router'
 
 const form = ref()
-const loading = ref( false )
-const org = reactive( { name: '', summary: '', cover: '' } )
+const loading = ref(false)
+const org = reactive({ name: '', summary: '', cover: '' })
+
+const admin = computed(() => org.value?.user_member?.permission > 0)
 
 const editId = ref()
 const router = useRouter()
 const route = useRoute()
 
-watchEffect( () => {
-  if ( !org.members ) return
+watchEffect(() => {
+  if (!org.members) return
 
-  org._members = [ { status: 0, user: org.owner }, ...org.members ]
+  org._members = [{ status: 0, user: org.owner }, ...org.members]
 
 })
 
 
-async function handleAddMember( item ) {
-  if ( ! editId.value ) {
-    ElMessage.error( '请先创建组织' )
+async function handleAddMember(item) {
+  if (!editId.value) {
+    ElMessage.error('请先创建组织')
     return
   }
 
-  const result = await organizationModel.invite( editId.value, item.id )
+  const result = await organizationModel.invite(editId.value, item.id)
 
-  console.log( result )
+  console.log(result)
 }
 
 /**
@@ -120,17 +120,17 @@ function getRules() {
   /**
    * 验证回调函数
    */
-  const checkInfo = ( rule, value, callback ) => {
-    if ( ! value ) {
-      callback( new Error( '信息不能为空' ) )
+  const checkInfo = (rule, value, callback) => {
+    if (!value) {
+      callback(new Error('信息不能为空'))
     }
     callback()
   }
   const rules = {
-    name: [ { validator: checkInfo, trigger: 'blur', required: true } ],
+    name: [{ validator: checkInfo, trigger: 'blur', required: true }],
     // permission: [{ validator: checkInfo, trigger: 'blur', required: true }],
-    description: [ { validator: checkInfo, trigger: 'blur', required: true } ],
-    cover: [ { validator: checkInfo, trigger: 'blur', required: true } ],
+    description: [{ validator: checkInfo, trigger: 'blur', required: true }],
+    cover: [{ validator: checkInfo, trigger: 'blur', required: true }],
   }
   return { rules }
 }
@@ -145,7 +145,7 @@ onUpdated(render)
 
 let init = false
 function render() {
-  if ( init ) return
+  if (init) return
   init = true
 
   editId.value = route.params.id
@@ -153,9 +153,9 @@ function render() {
 }
 
 const getOrg = async () => {
-  if ( ! editId.value ) return
+  if (!editId.value) return
   loading.value = true
-  const model = await organizationModel.info( editId.value )
+  const model = await organizationModel.info(editId.value)
 
   // console.log( model )
 
@@ -179,24 +179,24 @@ const submitForm = async formName => {
   form.value.validate(async valid => {
     if (valid) {
       let res = {}
-      if ( editId.value ) {
-        res = await organizationModel.edit( editId.value, org )
+      if (editId.value) {
+        res = await organizationModel.edit(editId.value, org)
       } else {
-        res = await organizationModel.create( org )
+        res = await organizationModel.create(org)
         // res = await wikiModel.createBook(wiki)
-        resetForm( formName )
+        resetForm(formName)
       }
 
-      console.log( res )
+      console.log(res)
 
-      if ( res ) {
+      if (res) {
 
-        await window.$tipper.mention( new MentionTip( editId.value ? "修改成功!" : "创建成功!", {
+        await window.$tipper.mention(new MentionTip(editId.value ? "修改成功!" : "创建成功!", {
           type: TipType.SUCCESS
-        } ) )
+        }))
 
-        if ( editId.value ) router.back()
-        else await router.push( '/org/' + res.id )
+        if (editId.value) router.back()
+        else await router.push('/org/' + res.id)
 
       }
 
@@ -211,15 +211,13 @@ const uploadCover = ref(res => {
   const url = res[0]
   const uuid = url.split("/").at(-1)
 
-  org.cover = GlobalConfig.hostName + url.replace(uuid, "") + encodeURIComponent(uuid)
+  org.cover = `${GlobalConfig.hostName}:${GlobalConfig.endsPort}` + url.replace(uuid, "") + encodeURIComponent(uuid)
 })
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-tabs__content) {
   top: 20px;
 
 }
-
 </style>

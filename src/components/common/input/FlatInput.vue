@@ -256,7 +256,7 @@ export default {
 
   width: calc(100% - 4px);
   height:  calc(100% - 4px);
-  max-height: 32px;
+  min-height: 32px;
 
   border: 2px solid var(--el-color-primary-light-3);
   border-radius: var(--border-radius-inner, 8px);

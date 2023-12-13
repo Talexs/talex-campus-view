@@ -16,11 +16,12 @@ const loadingDirective = {
         }
 
         wrapper.style.opacity = '0'
+        wrapper.style.pointerEvents = "none";
         app.mount(wrapper)
     },
     beforeUpdate(el, binding) {
 
-        const { app, wrapper, timer } = el._t_loading
+        const { wrapper, timer } = el._t_loading
 
         clearTimeout(timer)
 
@@ -28,15 +29,15 @@ const loadingDirective = {
 
             el._t_loading.timer = setTimeout(() => {
 
-                wrapper.style.opacity = '.55'
+                wrapper.style.opacity = '.75'
                 wrapper.style.pointerEvents = ''
 
             }, 200)
 
         } else {
 
-            wrapper.style.opacity = '0'
-            wrapper.style.pointerEvents = 'none'
+            wrapper.style.opacity = "0";
+            wrapper.style.pointerEvents = "none";
 
         }
 

@@ -1,4 +1,5 @@
 <template>
+  <template>
   <div class="TalexDialog-Container">
     <div v-if="hasDisplay" @click="visible = true">
       <slot name="display">
@@ -9,13 +10,12 @@
     <teleport :to="to">
       <div ref="wrapperRef" @click="_activator" class="TalexDialog-Wrapper transition-cubic" :class="{ visible }">
         <div class="TalexDialog-Main transition-cubic">
-<!--          <div class="TalexCoverDialog-Wrapper">-->
-            <slot />
-<!--          </div>-->
+          <slot />
         </div>
       </div>
     </teleport>
   </div>
+</template>
 </template>
 
 <script setup>
@@ -35,7 +35,9 @@ const wrapperRef = ref(null)
 async function _activator(e) {
   const el = wrapperRef.value
 
-  if( e?.path[0] !== el ) return
+   const _path = e.composedPath ? e.composedPath() : e.path
+
+  if( _path[0] !== el ) return
   if( !props.activator ) {
     return visible.value = false
   }
@@ -110,7 +112,8 @@ export default {
 
   box-sizing: border-box;
   border-radius: 8px;
-  backdrop-filter: saturate(180%) blur(5px);
+  background-color: #010101A0;
+  // backdrop-filter: saturate(180%) blur(5px);
   pointer-events: none;
   //transform: scale(1.2);
   opacity: 0;
@@ -131,7 +134,7 @@ export default {
     height: 100%;
 
     border-radius: 8px;
-    //background-color: var(--el-bg-color-page);
+    background-color: var(--el-bg-color-page);
     filter: brightness(150%);
     opacity: .45;
     transition: .3s cubic-bezier(.25,.8,.25,1);
@@ -151,8 +154,9 @@ export default {
   left: 50%;
   top: 50%;
 
-  backdrop-filter: saturate(180%) blur(20px);
-  border-radius: 8px;
+  backdrop-filter: blur(50px) saturate(180%);
+  border-radius: 12px;
+  box-shadow: 0 0 2px 1px rgba(0,0,0,.2);
   transform: translate(-50%, -50%) scale(1.125, 1.25) translateY(-30px);
   opacity: 0;
   overflow: hidden;

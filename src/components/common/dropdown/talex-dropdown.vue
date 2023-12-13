@@ -100,8 +100,10 @@ const containerRef = ref(null)
 function listener(e) {
   let caught = false
 
+  const _path = e.composedPath ? e.composedPath() : e.path
+
   // eslint-disable-next-line no-return-assign
-  e.path.forEach(path => caught = caught || ['Talex-Dropdown-Wrapper'/* , 'TalexDropdown-Container' */].includes(path.className))
+  _path.forEach(path => caught = caught || ['Talex-Dropdown-Wrapper'/* , 'TalexDropdown-Container' */].includes(path.className))
 
   if (!caught) closeMenu()
 }

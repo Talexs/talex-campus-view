@@ -34,7 +34,7 @@ import Loading from '~/plugins/directives/Loading'
 import ForceFocus from '~/plugins/directives/ForceFocus.js'
 import store from './plugins/store/index'
 
-app.use(pinia).use(router).use(VWave)
+app.use(pinia).use(router).use(VWave, {})
     .directive('loading', Loading)
     .directive('force-focus', ForceFocus)
 
